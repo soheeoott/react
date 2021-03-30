@@ -5,7 +5,10 @@ class Subject extends Component {
   render(){
     return (
       <header>
-        <h1>CRUD</h1>
+        {/* 속성 */}
+        {/* tag : attribute */}
+        {/* react : props */}
+        <h1>{this.props.title}</h1>
       </header>
     );
   }
@@ -29,8 +32,8 @@ class Content extends Component {
   render(){
     return (
       <article>
-        <h2>HTML</h2>
-        HTML info
+        <h2>{this.props.title}</h2>
+        {this.props.desc}
       </article>
     );
   }
@@ -40,9 +43,11 @@ class App extends Component {
   render(){
     return (
       <div className="App">
-        <Subject></Subject>
+
+        {/* 가변적인 출력 값 */}
+        <Subject title="CRUD"></Subject>
         <Toc></Toc>
-        <Content></Content>
+        <Content title="" desc=""></Content>
       </div>
     );
   }
