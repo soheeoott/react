@@ -7,7 +7,7 @@ class Subject extends Component {
             {/* 속성 */}
             {/* tag : attribute */}
             {/* react : props */}
-            <h1>{this.props.title}</h1>
+            <h1><a href="/">{this.props.title}</a></h1>
         </header>
         );
     }
