@@ -82,7 +82,7 @@ class App extends Component {
     } else if(this.state.mode === 'update') {
       _content = this.getReadContent();
       _article = <UpdateContent data={_content}></UpdateContent>;
-    } 
+    }
     return _article;
   }
   render(){
