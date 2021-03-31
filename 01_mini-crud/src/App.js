@@ -5,6 +5,7 @@ import Toc from './components/Toc';
 import Control from './components/Control';
 import ReadContent from './components/ReadContent';
 import CreateContent from './components/CreateContent';
+import UpdateContent from './components/UpdateContent';
 
 // debugger
 // 개발자 도구의 디버거 프로그램 실행
@@ -34,20 +35,22 @@ class App extends Component {
     this.maxId = 3;
     // state.contents.id.length;
   }
-  render(){
+  getReadContent(){
+    for(let i=0; i < this.state.contents.length; i++){
+      let data = this.state.contents[i];
+      if(data.id === this.state.selectedId){
+        return data;
+      }
+    }
+  }
+  getContent(){
     let _title, _desc, _article = null;
     if(this.state.mode === 'init'){
       _title = this.state.init.title;
       _desc = this.state.init.desc;
     } else if(this.state.mode === 'read'){
-      for(let i=0; i < this.state.contents.length; i++){
-        let data = this.state.contents[i];
-        if(data.id === this.state.selectedId){
-          _title = data.title;
-          _desc = data.desc;
-          _article = <ReadContent title={_title} desc={_desc}></ReadContent>;
-        }
-      }
+      let _content = this.getReadContent();
+      _article = <ReadContent title={_content.title} desc={_content.desc}></ReadContent>;
     } else if(this.state.mode === 'create'){
       _article = <CreateContent onSubmit={function(_title, _desc){
         this.maxId = this.maxId + 1;
@@ -76,7 +79,13 @@ class App extends Component {
           contents: newContents
         });
       }.bind(this)}></CreateContent>;
-    }
+    } else if(this.state.mode === 'update') {
+      _content = this.getReadContent();
+      _article = <UpdateContent data={_content}></UpdateContent>;
+    } 
+    return _article;
+  }
+  render(){
     return (
       <div className="App">
 
@@ -112,7 +121,7 @@ class App extends Component {
             mode: _mode
           });
         }.bind(this)}></Control>
-        {_article}
+        {this.getContent()}
       </div>
     );
   }
