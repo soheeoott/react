@@ -2,13 +2,15 @@ import './App.css';
 import React, { Component } from 'react';
 import Subject from './components/Subject';
 import Toc from './components/Toc';
-import Content from './components/Content';
+import Control from './components/Control';
+import ReadContent from './components/ReadContent';
+import CreateContent from './components/CreateContent';
 
-{/*
-실행을 멈추고 - 개발자 도구 - Source (여러가지 정보들을 보기 쉽게 알려준다.)
-debugger;
-*/}
-
+// debugger
+// 개발자 도구의 디버거 프로그램 실행
+// 작성한 부분에서 실행이 멈춘다.
+// Scope : this 의 값이 있는지 확인할 수 있다.
+// Source : 여러가지 정보들을 보기 쉽게 알려준다.
 class App extends Component {
   // 컴포넌트가 실행될 때 render 함수 보다 먼저 실행되서 초기화를 수행
   constructor(props){
@@ -21,16 +23,19 @@ class App extends Component {
       mode: 'read',
       subject:{title: 'CRUD'},
       init:{title:'', desc:'항목을 선택'},
-      selectedId: 2,
+      selectedId: 0,
       contents:[
         {id:1, title:'HTML', desc:'HTML info'},
         {id:2, title:'CSS', desc:'CSS info'},
         {id:3, title:'JS', desc:'JS info'}
       ]
     }
+    // 불필요한 렌더링 방지를 위해 maxId 생성
+    this.maxId = 3;
+    // state.contents.id.length;
   }
   render(){
-    let _title, _desc = null;
+    let _title, _desc, _article = null;
     if(this.state.mode === 'init'){
       _title = this.state.init.title;
       _desc = this.state.init.desc;
@@ -40,8 +45,37 @@ class App extends Component {
         if(data.id === this.state.selectedId){
           _title = data.title;
           _desc = data.desc;
+          _article = <ReadContent title={_title} desc={_desc}></ReadContent>;
         }
       }
+    } else if(this.state.mode === 'create'){
+      _article = <CreateContent onSubmit={function(_title, _desc){
+        this.maxId = this.maxId + 1;
+
+        // push : 새로운 데이터를 추가할 때 원본의 값이 변경된다.
+        ///         성능을 개선할 때 까다로움
+        // concat : 새로운 데이터를 추가할 때 원본을 바뀌지 않고, 값을 변수에 담아 사용
+        //          유지보수 유용
+        // let _contents = this.state.contents.concat (
+        //   {id: this.maxId, title: _title, desc: _desc}
+        // )
+
+        // Array.from() : 원본 불변의 법칙, 원본을 복제 후 변형
+        // Object.assign(빈 객체 | 새로운 객체 | 복제한 값을 추가할 객체, 복제할 대상) : 복제된 객체를 만들 때
+        
+        // immutable : 유사 배열, 유사 객체를 제어하는 방법
+        // 모든 명령어들이 불변하기 때문에 일관된 코드를 사용할 수 있다.
+
+        // a = {name: 'test'};
+        // Object.assign({region: 'korea'}, a);
+        // {region: 'korea', name: 'test'}
+        let newContents = Array.from(this.state.contents);
+        newContents.push({id: this.maxId, title: _title, desc: _desc});
+        
+        this.setState({
+          contents: newContents
+        });
+      }.bind(this)}></CreateContent>;
     }
     return (
       <div className="App">
@@ -73,7 +107,12 @@ class App extends Component {
             selectedId: Number(id)  
           });
         }.bind(this)} data={this.state.contents}></Toc>
-        <Content title={_title} desc={_desc}></Content>
+        <Control onChangeMode={function(_mode){
+          this.setState({
+            mode: _mode
+          });
+        }.bind(this)}></Control>
+        {_article}
       </div>
     );
   }
