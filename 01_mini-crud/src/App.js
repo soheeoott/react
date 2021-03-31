@@ -21,7 +21,7 @@ class App extends Component {
     // state : 컴포넌트 내부적으로 사용하는 구현에 필요한 데이터
     // 값이 변동되면 render 함수가 다시 호출된다.
     this.state = {
-      mode: 'read',
+      mode: 'init',
       subject:{title: 'CRUD'},
       init:{title:'', desc:'항목을 선택'},
       selectedId: 0,
@@ -44,12 +44,12 @@ class App extends Component {
     }
   }
   getContent(){
-    let _title, _desc, _article = null;
+    let _title, _desc, _article, _content = null;
     if(this.state.mode === 'init'){
       _title = this.state.init.title;
       _desc = this.state.init.desc;
     } else if(this.state.mode === 'read'){
-      let _content = this.getReadContent();
+      _content = this.getReadContent();
       _article = <ReadContent title={_content.title} desc={_content.desc}></ReadContent>;
     } else if(this.state.mode === 'create'){
       _article = <CreateContent onSubmit={function(_title, _desc){
@@ -72,16 +72,36 @@ class App extends Component {
         // a = {name: 'test'};
         // Object.assign({region: 'korea'}, a);
         // {region: 'korea', name: 'test'}
-        let newContents = Array.from(this.state.contents);
-        newContents.push({id: this.maxId, title: _title, desc: _desc});
+        let _contents = Array.from(this.state.contents);
+        _contents.push({id: this.maxId, title: _title, desc: _desc});
         
         this.setState({
-          contents: newContents
+          contents: _contents,
+          mode: 'read',
+          selectedId: this.maxId
         });
-      }.bind(this)}></CreateContent>;
-    } else if(this.state.mode === 'update') {
-      _content = this.getReadContent();
-      _article = <UpdateContent data={_content}></UpdateContent>;
+      }.bind(this)}></CreateContent>
+    } else if(this.state.mode === 'update'){
+      _content = this.getReadContent(); // error
+      let _id = _content.id;
+      _article = <UpdateContent data={_content} onSubmit={
+        function(_id, _title, _desc){
+
+          // 원본을 복제한 새로운 배열
+          let _contents = Array.from(this.state.contents); // TypeError: Cannot read property 'contents' of undefined
+          
+          for(let i = 0; i < _contents.length; i++){
+            if(_contents[i].id === _id){
+              _contents[i] = {id: _id, title: _title, desc: _desc};
+            }
+          }
+
+          this.setState({
+            contents: _contents,
+            mode: 'read'
+          });
+        }
+      }></UpdateContent>;
     }
     return _article;
   }
@@ -106,8 +126,7 @@ class App extends Component {
             // 이미 컴포넌트가 생성된 다음에 동적으로 state 값으로 변경할 때
             // setState 함수안에 변경하고 싶은 값을 객체로 전달
             this.setState({mode: 'init'});
-          }.bind(this)}
-        >
+          }.bind(this)}>
         </Subject>
         <Toc onChangePage={function(id){
           this.setState({
@@ -115,7 +134,8 @@ class App extends Component {
             // string
             selectedId: Number(id)  
           });
-        }.bind(this)} data={this.state.contents}></Toc>
+        }.bind(this)} data={this.state.contents}>
+        </Toc>
         <Control onChangeMode={function(_mode){
           this.setState({
             mode: _mode

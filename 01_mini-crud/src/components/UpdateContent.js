@@ -17,16 +17,23 @@ class UpdateContent extends Component {
         return (
         <article>
             <h2>Update</h2>
-            <form onSubmit={function(e){
+            <form action="/create_process" method="post" 
+                onSubmit={function(e){
                 e.preventDefault();
                 this.props.onSubmit(
-                    e.target.title.value,
-                    e.target.desc.value
+                    this.state.id,
+
+                    // state 와 동기화 되기 때문에
+                    this.state.title,
+                    this.state.desc
+                    // e.target.title.value,
+                    // e.target.desc.value
                 );
             }.bind(this)}>
+                {/* 식별자 역할 */}
+                <input type="hidden" name="id" value={this.state.id}></input>
+                
                 <p>
-                    {/* 식별자 역할 */}
-                    <input type="hidden" name="id" value={this.state.id}></input>
                     <input type="text"
                         name="title" 
                         placeholder="title" 
