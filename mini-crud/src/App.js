@@ -82,14 +82,12 @@ class App extends Component {
         });
       }.bind(this)}></CreateContent>
     } else if(this.state.mode === 'update'){
-      _content = this.getReadContent(); // error
-      let _id = _content.id;
-      _article = <UpdateContent data={_content} onSubmit={
-        function(_id, _title, _desc){
-
+      _content = this.getReadContent();
+      _article = <UpdateContent data={_content} onSubmit={function(_id, _title, _desc){
           // 원본을 복제한 새로운 배열
           let _contents = Array.from(this.state.contents); // TypeError: Cannot read property 'contents' of undefined
-          
+          console.log("update _contents", _contents);
+
           for(let i = 0; i < _contents.length; i++){
             if(_contents[i].id === _id){
               _contents[i] = {id: _id, title: _title, desc: _desc};
@@ -100,8 +98,7 @@ class App extends Component {
             contents: _contents,
             mode: 'read'
           });
-        }
-      }></UpdateContent>;
+        }.bind(this)}></UpdateContent>;
     }
     return _article;
   }
@@ -137,9 +134,26 @@ class App extends Component {
         }.bind(this)} data={this.state.contents}>
         </Toc>
         <Control onChangeMode={function(_mode){
-          this.setState({
-            mode: _mode
-          });
+          if(_mode === 'delete'){
+            if(window.confirm('really?')){
+              let _contents = Array.from(this.state.contents);
+              for(let i = 0; i < this.state.contents.length; i++){
+                if(_contents[i].id === this.state.selectedId){
+                  // splice : 범위지정, 원본이 변경 됨
+                  _contents.splice(i, 1);
+                }
+              }
+              this.setState({
+                mode: 'init',
+                contents: _contents
+              });
+              alert('delete complete');
+            }
+          } else {
+            this.setState({
+              mode: _mode
+            });
+          }
         }.bind(this)}></Control>
         {this.getContent()}
       </div>

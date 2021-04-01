@@ -10,7 +10,7 @@ class Subject extends Component {
             <h1><a href="/" onClick={function(e){
                 e.preventDefault();
 
-                // 함수를 호출
+                // 함수를 호출  
                 this.props.onChangePage();
             }.bind(this)}>{this.props.title}</a></h1>
         </header>

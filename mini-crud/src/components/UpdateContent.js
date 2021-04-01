@@ -4,7 +4,7 @@ class UpdateContent extends Component {
     constructor(props){
         super(props);
         this.state = {
-            id: this.props.data.id,
+            id: this.props.data.id, // TypeError: Cannot read property 'id' of undefined
             title: this.props.data.title,
             desc: this.props.data.desc
         }
