@@ -12,15 +12,15 @@ class CreateContent extends Component {
                     e.target.desc.value
                 );
             }.bind(this)}>
-                <p><input type="text" name="title" placeholder="title"></input></p>
                 <p>
-                    <textarea name="desc" placeholder="desc">
-                    </textarea>
+                    <input type="text" name="title" placeholder="title"></input>
+                </p>
+                <p>
+                    <textarea name="desc" placeholder="desc"></textarea>
                 </p>
                 <p>
                     <input type="submit"></input>
                 </p>
-
             </form>
         </article>
         );

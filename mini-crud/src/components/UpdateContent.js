@@ -4,7 +4,7 @@ class UpdateContent extends Component {
     constructor(props){
         super(props);
         this.state = {
-            id: this.props.data.id, // TypeError: Cannot read property 'id' of undefined
+            id: this.props.data.id,
             title: this.props.data.title,
             desc: this.props.data.desc
         }
@@ -21,13 +21,10 @@ class UpdateContent extends Component {
                 onSubmit={function(e){
                 e.preventDefault();
                 this.props.onSubmit(
+                    // state 와 동기화
                     this.state.id,
-
-                    // state 와 동기화 되기 때문에
                     this.state.title,
                     this.state.desc
-                    // e.target.title.value,
-                    // e.target.desc.value
                 );
             }.bind(this)}>
                 {/* 식별자 역할 */}
@@ -37,10 +34,6 @@ class UpdateContent extends Component {
                     <input type="text"
                         name="title" 
                         placeholder="title" 
-                        
-                        // props 값은 read-only → state 로 변형
-                        // value={this.props.state.title}>
-                        // input 값을 바꿨을 때 state 값을 바뀌게하면 read-only 가 아니게 된다.
                         value={this.state.title}
 
                         // state 에 동기화
@@ -53,7 +46,6 @@ class UpdateContent extends Component {
                     <textarea name="desc" 
                         placeholder="desc"
                         value={this.state.desc}
-                        // onChange={this.inputFormHandler.bind(this)}>
                         onChange={this.inputFormHandler}>
                     </textarea>
                 </p>
