@@ -11,11 +11,20 @@
         </style>
         <div id="red"></div>
         <script>
+            function reducer(state, action){
+                if(state === undefined){
+                    return {color: 'yellow'}
+                }
+            }
+            let store = Redux.createStore(reducer);
+            console.log(store.getState());
+
             function red(){
+                let state = store.getState();
                 document.querySelector('#red').innerHTML = `
-                    <div class="container" id="component_red">
+                    <div class="container" id="component_red" style="background-color: ${state.color}">
                         <h1>red</h1>
-                        <input type="button" value="fire" onclick="
+                        <input type="button" value="yellow" onclick="
                             document.querySelector('#component_red').style.backgroundColor = 'red';
                             document.querySelector('#component_green').style.backgroundColor = 'red';
                             document.querySelector('#component_blue').style.backgroundColor = 'red';
