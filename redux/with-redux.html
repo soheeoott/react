@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.0-beta.1/redux.min.js"></script>
+    </head>
+    <body>
+        <style>
+            .container{
+                border: 5px solid black;
+                padding: 10px;
+            }
+        </style>
+        <div id="red"></div>
+        <script>
+            function red(){
+                document.querySelector('#red').innerHTML = `
+                    <div class="container" id="component_red">
+                        <h1>red</h1>
+                        <input type="button" value="fire" onclick="
+                            document.querySelector('#component_red').style.backgroundColor = 'red';
+                            document.querySelector('#component_green').style.backgroundColor = 'red';
+                            document.querySelector('#component_blue').style.backgroundColor = 'red';
+                            ">
+                    </div>
+                `;
+            }
+            red();
+        </script>
+    </body>
+</html>
