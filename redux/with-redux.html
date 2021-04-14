@@ -15,6 +15,13 @@
                 if(state === undefined){
                     return {color: 'yellow'}
                 }
+                // return {color: 'red'} // state 값을 직접 변경 xx
+                
+                let newState;
+                if(action.type === 'CHANGE_COLOR'){
+                    newState = Object.assign({}, state, {color: 'red'});
+                }
+                return newState;
             }
             let store = Redux.createStore(reducer);
             console.log(store.getState());
@@ -25,13 +32,12 @@
                     <div class="container" id="component_red" style="background-color: ${state.color}">
                         <h1>red</h1>
                         <input type="button" value="yellow" onclick="
-                            document.querySelector('#component_red').style.backgroundColor = 'red';
-                            document.querySelector('#component_green').style.backgroundColor = 'red';
-                            document.querySelector('#component_blue').style.backgroundColor = 'red';
+                            store.dispatch({type: 'CHANGE_COLOR', color: 'red'});
                             ">
                     </div>
                 `;
             }
+            store.subscribe(red);
             red();
         </script>
     </body>
