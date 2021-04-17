@@ -41,7 +41,9 @@
             function control(){
                 document.querySelector('#control').innerHTML = `
                 <ul>
-                    <li><a href="#">create</a></li>
+                    <li><a onclick="
+                        event.preventDefault();
+                    " href="#">create</a></li>
                     <li><input type="button" value="delete"></li>
                 </ul>
                 `
@@ -49,24 +51,56 @@
 
             function article(){
                 let state = store.getState();
-                let title, desc;
-                for(let i = 0; i < state.contents.length; i++){
-                    if(state.contents[i].id === state.select_id){
-                        title = state.contents[i].title;
-                        desc = state.contents[i].desc;
+
+                if(state.mode === 'create'){
+                    document.querySelector('#article').innerHTML = `
+                    <article>
+                        <form onsubmit="
+                            event.preventDefault();
+                            let _title = this.title.value;
+                            let _desc = this.desc.value;
+                            store.dispatch({
+                                type: 'CREATE',
+                                title: _title,
+                                desc: _desc
+                            })
+                        ">
+                            <p>
+                                <input type="text" name="title" placeholder="title">
+                            </p>
+                            <p>
+                                <textarea name="desc" placeholder="desc">
+
+                                </textarea>
+                            </p>
+                            <p>
+                                <input type="submit">
+                            </p>
+                        </form>
+                    </article>
+                    `
+                } else if(state.mode === 'read'){
+                    let title, desc;
+                    for(let i = 0; i < state.contents.length; i++){
+                        if(state.contents[i].id === state.select_id){
+                            title = state.contents[i].title;
+                            desc = state.contents[i].desc;
+                        }
                     }
+                    document.querySelector('#article').innerHTML = `
+                    <article>
+                        <h2>${title}</h2>
+                        ${desc}
+                    </article>
+                    `
                 }
-                document.querySelector('#article').innerHTML = `
-                <article>
-                    <h2>${title}</h2>
-                    ${desc}
-                </article>
-                `
             }
 
             function reducer(state, action){
                 if(state === undefined){
                     return {
+                        max_id: 2,
+                        mode: 'create',
                         select_id: 1,
                         contents:[
                             {id: 1, title: 'HTML', desc: 'HTML is ..'},
@@ -77,11 +111,21 @@
                 let newState = {};
                 if(action.type === 'SELECT'){
                     newState = Object.assign({}, state, {select_id: action.id});
+                } else if(action.type === 'CREATE'){
+                    let newMaxId = state.max_id + 1;
+                    let newContents = state.contents.concat();
+                    newContents.push({id: newMaxId, title: action.title, desc: action.desc});
+                    newState = Object.assign({}, state, {
+                        max_id: newMaxId,
+                        contents: newContents,
+                        mode: 'read'
+                    });
                 }
                 return newState;
             }
             let store = Redux.createStore(reducer);
             store.subscribe(article);
+            store.subscribe(toc);
             subject();
             toc();
             control();
