@@ -43,8 +43,16 @@
                 <ul>
                     <li><a onclick="
                         event.preventDefault();
+                        store.dispatch({
+                            type: 'CHANGE_MODE',
+                            mode: 'create'
+                        });
                     " href="#">create</a></li>
-                    <li><input type="button" value="delete"></li>
+                    <li><input onclick="
+                        store.dispatch({
+                            type: 'DELETE'
+                        });
+                        " type="button" value="delete"></li>
                 </ul>
                 `
             }            
@@ -93,6 +101,13 @@
                         ${desc}
                     </article>
                     `
+                } else if(state.mode === 'init'){
+                    document.querySelector('#article').innerHTML = `
+                    <article>
+                        <h2>init</h2>
+                        Hello, Redux
+                    </article>
+                    `
                 }
             }
 
@@ -100,8 +115,8 @@
                 if(state === undefined){
                     return {
                         max_id: 2,
-                        mode: 'create',
-                        select_id: 1,
+                        mode: 'init',
+                        select_id: null,
                         contents:[
                             {id: 1, title: 'HTML', desc: 'HTML is ..'},
                             {id: 2, title: 'CSS', desc: 'CSS is ..'}
@@ -110,7 +125,8 @@
                 }
                 let newState = {};
                 if(action.type === 'SELECT'){
-                    newState = Object.assign({}, state, {select_id: action.id});
+                    newState = Object.assign({}, state, 
+                        {select_id: action.id, mode: 'read'});
                 } else if(action.type === 'CREATE'){
                     let newMaxId = state.max_id + 1;
                     let newContents = state.contents.concat();
@@ -120,8 +136,25 @@
                         contents: newContents,
                         mode: 'read'
                     });
+                } else if(action.type === 'DELETE'){
+                    let newContents = [];
+                    for(let i=0; i < state.contents.length; i++){
+                        if(state.select_id !== state.contents[i].id){
+                            newContents.push(
+                                state.contents[i]
+                            );
+                        }
+                    }
+                    newState = Object.assign({}, state, {
+                        contents: newContents,
+                        mode: 'init'
+                    });
                 }
                 return newState;
+            } else if(action.type === 'CHANGE_MODE'){
+                newState = Object.assign({}, state, {
+                    mode: action.mode
+                });
             }
             let store = Redux.createStore(reducer);
             store.subscribe(article);
