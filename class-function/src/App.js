@@ -41,12 +41,31 @@ function FuncComp(props){
   )
 }
 
+// console.log 로 출력되는 글씨 색상을 빨강으로
+let classStyle = 'color:red';
 class ClassComp extends React.Component {
   state = {
     number: this.props.initNumber,
     date: (new Date()).toString()
   }
+  componentWillMount(){
+    console.log('%cclass => componentWillMount', classStyle);
+  }
+  componentDidMount(){
+    console.log('%cclass => componentDidMount', classStyle);
+  }
+  shouldComponentUpdate(nextProps, nextState){
+    console.log('%cclass => shouldComponentUpdate', classStyle);
+    return true;
+  }
+  componentWillUpdate(nextProps, nextState){
+    console.log('%cclass => componentWillUpdate', classStyle);
+  }
+  componentDidUpdate(nextProps, nextState){
+    console.log('%cclass => componentDidUpdate', classStyle);
+  }
   render(){
+    console.log('%cclass => render', classStyle);
     return (
       <div className="container">
         <h2>Class style component</h2>
