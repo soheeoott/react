@@ -1,5 +1,5 @@
 import './App.css';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 function App() {
   return (
@@ -10,6 +10,8 @@ function App() {
   );
 }
 
+let funcStyle = 'color:orange';
+let funcId = 0;
 function FuncComp(props){
   let numberState = useState(props.initNumber);
   let number = numberState[0];
@@ -22,6 +24,32 @@ function FuncComp(props){
 
   // 방법2
   let [_date, setDate] = useState((new Date()).toString());
+  
+  console.log('%cfunc => render '+(++funcId), funcStyle);
+  
+  useEffect(function(){
+    console.log('%cfunc => useEffect (componentDidMount)' +(++funcId), funcStyle);
+    document.title = number;
+    return function(){
+      console.log('%cfunc => useEffect return = clean up (componentWillUnmount)' +(++funcId), funcStyle);
+    }
+  }, []); // 빈 배열을 줌으로써 componentDidMount 역할만 수행
+
+  useEffect(function(){
+    console.log('%cfunc => useEffect number (componentDidMount & componentDidUpdate)' +(++funcId), funcStyle);
+    document.title = number;
+    return function(){
+      console.log('%cfunc => useEffect number return = clean up (componentWillUnmount)' +(++funcId), funcStyle);
+    }
+  }, [number]); // skipping effect
+
+  useEffect(function(){
+    console.log('%cfunc => useEffect date (componentDidMount & componentDidUpdate)' +(++funcId), funcStyle);
+    document.title = _date;
+    return function(){
+      console.log('%cfunc => useEffect date return = clean up (componentWillUnmount)' +(++funcId), funcStyle);
+    }
+  }, [_date]); // skipping effect
   return (
     <div className="container">
       <h2>Function style component</h2>
