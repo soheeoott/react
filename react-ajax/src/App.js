@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 
 class Nav extends Component {
+  state = {
+    list: []
+  }
   componentDidMount(){
     fetch('list.json')
       .then(function(result){
@@ -8,15 +11,19 @@ class Nav extends Component {
       })
       .then(function(json){
         console.log(json);
-      })
+        this.setState({list: json});
+      }.bind(this));
   }
   render(){
+    let listTag = [];
+    for(let i=0; i<this.state.list.length; i++){
+      let li = this.state.list[i];
+      listTag.push(<li key={li.id}><a href={li.id}>{li.title}</a></li>);
+    }
     return (
       <nav>
           <ul>
-            <li><a href="1">HTML</a></li>
-            <li><a href="2">CSS</a></li>
-            <li><a href="3">JS</a></li>
+            {listTag}
           </ul>
         </nav>
     );
