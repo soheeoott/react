@@ -2,6 +2,13 @@ import React, {Component} from 'react';
 
 class Nav extends Component {
   componentDidMount(){
+    fetch('list.json')
+      .then(function(result){
+        return result.json();
+      })
+      .then(function(json){
+        console.log(json);
+      })
   }
   render(){
     return (
