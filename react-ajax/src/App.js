@@ -57,7 +57,18 @@ class App extends Component {
       <div className="App">
           <h1>WEB</h1>
           <Nav onClick={function(id){
-            console.log(id);
+            fetch(id + '.json')
+              .then(function(result){
+                return result.json();
+              })
+              .then(function(json){
+                this.setState({
+                  article:{
+                    title: json.title,
+                    desc: json.desc
+                  }
+                })
+              }.bind(this));
           }.bind(this)}></Nav>
           <Article title={this.state.article.title} desc={this.state.article.desc}></Article>
       </div>
