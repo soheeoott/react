@@ -30,17 +30,30 @@ class Nav extends Component {
   }
 }
 
-function App() {
-  return (
-    <div className="App">
-        <h1>WEB</h1>
-        <Nav></Nav>
-        <article>
-          <h2>init</h2>
-          Hello, React &amp; Ajax
-        </article>
-    </div>
-  );
+class Article extends Component {
+  render(){
+    return(
+      <article>
+        <h2>{this.props.title}</h2>
+        {this.props.desc}
+      </article>
+    );
+  }
+}
+
+class App extends Component {
+  state = {
+    article: {title:'init', desc:'Hello, React & Ajax'}
+  }
+  render(){
+    return (
+      <div className="App">
+          <h1>WEB</h1>
+          <Nav></Nav>
+          <Article title={this.state.article.title} desc={this.state.article.desc}></Article>
+      </div>
+    );
+  }
 }
 
 export default App;
