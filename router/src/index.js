@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter, Route} from 'react-router-dom';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 
 function App(){
@@ -13,9 +13,12 @@ function App(){
         <li><a href="/contact">Contact</a></li>
       </ul>
 
-      <Route exact path="/"><Home></Home></Route>
-      <Route path="/topics"><Topics></Topics></Route>
-      <Route path="/contact"><Contact></Contact></Route>
+      <Switch>
+        <Route exact path="/"><Home></Home></Route>
+        <Route path="/topics"><Topics></Topics></Route>
+        <Route path="/contact"><Contact></Contact></Route>
+        <Route path="/"><h2>Not Found</h2></Route>
+      </Switch>
 		</div>
 	)
 }
