@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter, Route, Switch, NavLink} from 'react-router-dom';
+import {BrowserRouter, Route, Switch, NavLink, useParams} from 'react-router-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
@@ -33,11 +33,47 @@ function Home(){
 	)
 }
 
+let contents = [
+  {id: 1, title: 'HTML', desc: 'HTML is...'},
+  {id: 2, title: 'CSS', desc: 'CSS is...'},
+  {id: 3, title: 'JS', desc: 'JS is...'}
+]
+
+function Topic(){
+  let params = useParams();
+  let topic_id = params.topic_id;
+  let sel_topic = {
+    title: 'Not Found',
+    desc: 'sorry..'
+  };
+  for(let i=0; i<contents.length; i++){
+    if(contents[i].id === Number(topic_id)){
+      sel_topic = contents[i];
+      break;
+    }
+  }
+  return (
+    <div>
+      <h3>{sel_topic.title}</h3>
+      {sel_topic.desc}
+    </div>
+  )
+}
+
 function Topics(){
+  let list = [];
+  for(let i=0; i<contents.length; i++){
+    list.push(<li key={contents[i].id}><NavLink to={'/topics/' + contents[i].id}>{contents[i].title}</NavLink></li>);
+  }
 	return (
 		<div>
 			<h2>Topics</h2>
-      Topics-Component Page
+      <ul>
+        {list}
+      </ul>
+      <Route path="/topics/:topic_id">
+        <Topic></Topic>
+      </Route>
 		</div>
 	)
 }
