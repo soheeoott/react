@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter, Route, Switch, Link} from 'react-router-dom';
+import {BrowserRouter, Route, Switch, NavLink} from 'react-router-dom';
+import './index.css';
 import reportWebVitals from './reportWebVitals';
 
 function App(){
@@ -8,9 +9,9 @@ function App(){
 		<div>
 			<h1>React Router Dom</h1>
       <ul>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/topics">Topics</Link></li>
-        <li><Link to="/contact">Contact</Link></li>
+        <li><NavLink exact to="/">Home</NavLink></li>
+        <li><NavLink to="/topics">Topics</NavLink></li>
+        <li><NavLink to="/contact">Contact</NavLink></li>
       </ul>
 
       <Switch>
