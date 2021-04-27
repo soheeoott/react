@@ -1,14 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {BrowserRouter, Route} from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 
 function App(){
 	return (
 		<div>
 			<h1>React Router Dom</h1>
-      <Home></Home>
-      <Topics></Topics>
-      <Contact></Contact>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/topics">Topics</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+
+      <Route path="/"><Home></Home></Route>
+      <Route path="/topics"><Topics></Topics></Route>
+      <Route path="/contact"><Contact></Contact></Route>
 		</div>
 	)
 }
@@ -41,7 +48,7 @@ function Contact(){
 }
 
 ReactDOM.render(
-  <App />,
+  <BrowserRouter><App /></BrowserRouter>,
   document.getElementById('root')
 );
 
